@@ -3,4 +3,14 @@ import matplotlib.pyplot as plt; import matplotlib; %matplotlib inline
 # Defining Sturm Functions
 def beta(alpha, k): return 2*(18*alpha - (2*alpha + 3)**2)/(18*alpha)
 def gamma(alpha, k): return (-108*alpha*k + 6*alpha + 9)/(18*alpha)
-def func1(alpha,k): return (3*beta(alpha, k)+gamma(alpha, k)*(4*alpha+6+6*alpha*gamma(alpha,k)/beta(alpha,k)))/beta(alpha,k)def func2(alpha, k): return (beta(alpha, k) + gamma(alpha, k))# Defining Sturm Tabledef zero_matrix(alpha, k):column0 = np.zeros(4, int); column0[0] = 1;column1 = np.zeros(4, int); column0[1] = 0;if gamma(alpha, k) > 0: column0[2] = 1else: column0[2] = 0
+def func1(alpha,k): return (3*beta(alpha, k)+gamma(alpha, k)*
+(4*alpha+6+6*alpha*gamma(alpha,k)/beta(alpha,k)))/beta(alpha,k)
+def func2(alpha, k): return (beta(alpha, k) + gamma(alpha, k))
+
+# Defining Sturm Table
+def zero_matrix(alpha, k):
+column0 = np.zeros(4, int); column0[0] = 1;
+column1 = np.zeros(4, int); column0[1] = 0;
+
+if gamma(alpha, k) > 0: column0[2] = 1
+else: column0[2] = 0
