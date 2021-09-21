@@ -14,3 +14,4 @@ column1 = np.zeros(4, int); column0[1] = 0;
 
 if gamma(alpha, k) > 0: column0[2] = 1
 else: column0[2] = 0
+ 
