@@ -1,55 +1,38 @@
 import scipy.integrate as integrate; import numpy as np
 
-# Defining Sturm Functions
-def beta(alpha, k): return 2*(18*alpha - (2*alpha + 3)**2)/(18*alpha)
-def gamma(alpha, k): return (-108*alpha*k + 6*alpha + 9)/(18*alpha)
-def func1(alpha,k): return (3*beta(alpha, k)+gamma(alpha, k)*
-                            (4*alpha+6+6*alpha*gamma(alpha,k)/beta(alpha,k)))/beta(alpha,k)
-def func2(alpha, k): return (beta(alpha, k) + gamma(alpha, k))
+# Definiendo Función de Sturm
+def b(a, k): return 2*(18*a - (2*a + 3)**2)/(18*a)
+def g(a, k): return (-108*a*k + 6*a + 9)/(18*a)
+def funcion1(a,k): return (3*b(a, k)+g(a, k)*
+                            (4*a+6+6*a*g(a,k)/b(a,k)))/b(a,k)
+def funcion2(a, k): return (b(a, k) + g(a, k))
 
-# Defining Sturm Table
-def zero_matrix(alpha, k):
-    column0 = np.zeros(4, int); column0[0] = 1;
-    column1 = np.zeros(4, int); column0[1] = 0;
+# Definiendo Tabla
+def matriz_cero(a, k):
+    columna0 = np.ceros(4, int); columna0[0] = 1;
+    columna1 = np.ceros(4, int); columna0[1] = 0;
 
-    if gamma(alpha, k) > 0: column0[2] = 1
-    else: column0[2] = 0
-    if func1(alpha, k) > 0: column0[3] = 1; column1[3] = 1
-    else: column0[3] = 0; column1[3] = 0
+    if g(a, k) > 0: columna0[2] = 1
+    else: columna0[2] = 0
+    if funcion1(a, k) > 0: columna0[3] = 1; columna1[3] = 1
+    else: columna0[3] = 0; columna1[3] = 0
 
-    column1[0] = 1
+    columna1[0] = 1
 
-    if (-2*alpha + 3) > 0: column1[1] = 1
-    else: column1[1] = 0
+    if (-2*a + 3) > 0: columna1[1] = 1
+    else: columna1[1] = 0
 
-    if func2(alpha, k) > 0: column1[2] = 1
-    else: column1[2] = 0
+    if funcion2(a, k) > 0: columna1[2] = 1
+    else: columna1[2] = 0
 
     counter1 = 0; counter2 = 0;
 
     for i in range(3):
 
-        if column0[i] != column0[i+1]: counter1 = counter1 + 1
-        if column1[i] != column1[i+1]: counter2 = counter2 + 1
+        if columna0[i] != columna0[i+1]: counter1 = counter1 + 1
+        if columna1[i] != columna1[i+1]: counter2 = counter2 + 1
         
-    if counter1 - counter2 != 0: print("There is a periodic solution.")
-    else: print("There is a pull-in.")
+    if counter1 - counter2 != 0: print("Es una solución periódica.")
+    else: print("No es una solución periódica.")
 
-# Plotting for Verification
-def model1(alpha, k):
-    
-    def model(x,t):
-        y = x[0]; dy = x[1]; xdot = [[],[]]; xdot[0] = dy
-        xdot[1] = -y + alpha*abs(y)*y + k/((1 - y)**2)
-        return xdot
-    time = np.linspace(0,10,1000); z1 = integrate.odeint(model,[0, 0],time)
-    return z1;
 
-def model2(alpha, k):
-    z2 = np.zeros((1000,2),float); counter = 0;
-    for i in range(0,1000):
-        if model1 (alpha, k)[i][0]>1: break
-        z2[i][:] = model2(alpha, k)[i][:]; counter = counter + 1;
-    z3 = np.zeros((counter,2), float);
-    for j in range(0, counter): z3[j][:] = z2[j][:];
-    return z3, counter
